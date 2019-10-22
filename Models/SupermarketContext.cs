@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Supermarket.Models;
 
 namespace Supermarket.Models
 {
@@ -10,5 +11,7 @@ namespace Supermarket.Models
         }
 
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<Category> Category { get; set; }
     }
 }

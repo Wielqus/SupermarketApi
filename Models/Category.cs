@@ -1,9 +1,12 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+
 
 namespace Supermarket.Models
 {
-    public class Product
+    public class Category
     {
         [Required]
         public long Id { get; set; }
@@ -12,13 +15,7 @@ namespace Supermarket.Models
         [DefaultValue(false)]
         public string Name { get; set; }
 
-        [Required]
-        [DefaultValue(false)]
-        public long Price { get; set; }
-
-        public int CategoryForeignKey { get; set; }
-        public Category Category { get; set; }
-
+        public List<Product> Products { get; set; }
 
     }
 }
