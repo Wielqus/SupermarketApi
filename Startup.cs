@@ -15,6 +15,9 @@ using Supermarket.Models;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Supermarket.API
 {
@@ -37,7 +40,8 @@ namespace Supermarket.API
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { 
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
                     Title = "Supermarket Api",
                     Version = "v1",
                     Description = "A simple supermarket ASP.NET Core Web API",
@@ -46,13 +50,30 @@ namespace Supermarket.API
                         Name = "Jakub Wielgus",
                         Url = new Uri("https://github.com/Wielqus"),
                     },
-                    });
+                });
 
-                    // Set the comments path for the Swagger JSON and UI.
-                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                    c.IncludeXmlComments(xmlPath);
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
+
+            services.AddTransient((config) =>
+            {
+                var conf = new JWTConfiguration();
+                Configuration.GetSection("JWTConfiguration").Bind(conf);
+                return conf;
+            });
+
+            services.AddTransient((config) =>
+            {
+                var conf = new User();
+                Configuration.GetSection("User").Bind(conf);
+                return conf;
+            });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            ConfigureJwt(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +104,30 @@ namespace Supermarket.API
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public void ConfigureJwt(IServiceCollection services)
+        {
+            var config = services.BuildServiceProvider().GetService<JWTConfiguration>();
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config.SecretKey));
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                IssuerSigningKey = signingKey,
+                ValidIssuer = config.ValidIssuer,
+                ValidAudience = config.ValidAudience
+            };
+            services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(c =>
+            {
+                c.RequireHttpsMetadata = false;
+                c.SaveToken = true;
+                c.TokenValidationParameters = tokenValidationParameters;
+            });
+
         }
     }
 }

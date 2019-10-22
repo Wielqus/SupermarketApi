@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Supermarket.API.Controllers
 {
@@ -130,6 +131,7 @@ namespace Supermarket.API.Controllers
         /// <response code="201">Returns the newly created product</response>
         /// <response code="400">Bad request</response>            
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             
