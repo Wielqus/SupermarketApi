@@ -9,25 +9,51 @@ using Supermarket.Models;
 
 namespace Supermarket.API.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
+
     public class ProductsController : ControllerBase
     {
         private readonly SupermarketContext _context;
 
+        /// <summary>
+        /// Products controller
+        /// </summary>
         public ProductsController(SupermarketContext context)
         {
             _context = context;
         }
 
-        // GET: api/Products
+        /// <summary>
+        /// Get list of products.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/Products
+        ///
+        /// </remarks>
+        /// <returns>A list of products</returns>
+        /// <response code="200">Returns the products list</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             return await _context.Products.ToListAsync();
         }
 
-        // GET: api/Products/5
+        /// <summary>
+        /// Get product
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/Products/1
+        ///
+        /// </remarks>
+        /// <returns>Product</returns>
+        /// <response code="200">Returns the product</response>
+        /// <response code="404">Product not find</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(long id)
         {
@@ -41,9 +67,23 @@ namespace Supermarket.API.Controllers
             return product;
         }
 
-        // PUT: api/Products/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Update product
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT /api/Products/1
+        ///     {
+        ///        "name": "Banan",
+        ///        "price": 2
+        ///     }
+        ///
+        /// </remarks>
+        /// <returns>A newly updated product</returns>
+        /// <response code="201">Returns the newly updated product</response>
+        /// <response code="400">Bad request</response> 
+        /// <response code="404">Product not find</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(long id, Product product)
         {
@@ -73,9 +113,22 @@ namespace Supermarket.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Products
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Creates a Product.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /Products
+        ///     {
+        ///        "name": "Banan",
+        ///        "price": 2
+        ///     }
+        ///
+        /// </remarks>
+        /// <returns>A newly created prodict</returns>
+        /// <response code="201">Returns the newly created product</response>
+        /// <response code="400">Bad request</response>            
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
@@ -86,7 +139,18 @@ namespace Supermarket.API.Controllers
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
-        // DELETE: api/Products/5
+        /// <summary>
+        /// Delete product
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE /api/Products/1
+        ///
+        /// </remarks>
+        /// <returns>A newly deleted product</returns>
+        /// <response code="201">Returns the newly deleted product</response>
+        /// <response code="404">Product not find</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Product>> DeleteProduct(long id)
         {
