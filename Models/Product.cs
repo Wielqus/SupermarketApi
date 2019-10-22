@@ -15,8 +15,6 @@ namespace Supermarket.Models
         [Required]
         [DefaultValue(false)]
         public long Price { get; set; }
-
-        public int CategoryForeignKey { get; set; }
         public Category Category { get; set; }
 
 
