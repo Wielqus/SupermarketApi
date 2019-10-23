@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Supermarket.Models;
+using Supermarket.API.Models;
 
 namespace Supermarket.API.Controllers
 {

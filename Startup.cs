@@ -11,13 +11,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Supermarket.Models;
+using Supermarket.API.Models;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Supermarket.API.Services;
+using System.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using Supermarket.API.Helpers;
 
 namespace Supermarket.API
 {
@@ -35,7 +39,36 @@ namespace Supermarket.API
         {
             services.AddDbContext<SupermarketContext>(opt =>
                opt.UseInMemoryDatabase("Products"));
+
+            services.AddCors();   
             services.AddControllers();
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            // configure DI for application services
+            services.AddScoped<IUserService, UserService>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -67,22 +100,6 @@ namespace Supermarket.API
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddTransient((config) =>
-            {
-                var conf = new JWTConfiguration();
-                Configuration.GetSection("JWTConfiguration").Bind(conf);
-                return conf;
-            });
-
-            services.AddTransient((config) =>
-            {
-                var conf = new User();
-                Configuration.GetSection("User").Bind(conf);
-                return conf;
-            });
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            ConfigureJwt(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,41 +120,20 @@ namespace Supermarket.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.UseHttpsRedirection();
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.UseAuthentication(); 
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-        }
-
-        public void ConfigureJwt(IServiceCollection services)
-        {
-            var config = services.BuildServiceProvider().GetService<JWTConfiguration>();
-            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config.SecretKey));
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                IssuerSigningKey = signingKey,
-                ValidIssuer = config.ValidIssuer,
-                ValidAudience = config.ValidAudience
-            };
-            services.AddAuthentication(o =>
-            {
-                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(c =>
-            {
-                c.RequireHttpsMetadata = false;
-                c.SaveToken = true;
-                c.TokenValidationParameters = tokenValidationParameters;
-            });
-
         }
     }
 }

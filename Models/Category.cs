@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 
-namespace Supermarket.Models
+namespace Supermarket.API.Models
 {
-    public class Category
+   public class Category
     {
         [Required]
         public long Id { get; set; }

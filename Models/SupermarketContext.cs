@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Supermarket.Models;
+using Supermarket.API.Models;
 
-namespace Supermarket.Models
+namespace Supermarket.API.Models
 {
     public class SupermarketContext : DbContext
     {

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Supermarket.Models
+namespace Supermarket.API.Models
 {
     public class Product
     {
