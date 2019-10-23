@@ -86,6 +86,7 @@ namespace Supermarket.API.Controllers
         /// <response code="400">Bad request</response> 
         /// <response code="404">Product not find</response>
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutProduct(long id, Product product)
         {
             if (id != product.Id)
@@ -154,6 +155,7 @@ namespace Supermarket.API.Controllers
         /// <response code="201">Returns the newly deleted product</response>
         /// <response code="404">Product not find</response>
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<Product>> DeleteProduct(long id)
         {
             var product = await _context.Products.FindAsync(id);

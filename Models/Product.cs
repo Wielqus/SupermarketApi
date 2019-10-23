@@ -15,7 +15,6 @@ namespace Supermarket.API.Models
         [Required]
         [DefaultValue(false)]
         public long Price { get; set; }
-        public Category Category { get; set; }
 
 
     }
