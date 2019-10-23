@@ -169,6 +169,16 @@ namespace Supermarket.API.Controllers
 
             return product;
         }
+        /// <summary>
+        /// Search product
+        /// </summary>
+
+        [HttpGet("search/{name}")]
+        public async Task<ActionResult<IEnumerable<Product>>> SearchProduct(string name)
+        {
+            return await _context.Products.Where(product => EF.Functions.Like(product.Name, String.Concat("%", name, "%"))).ToListAsync();
+        }
+
 
         private bool ProductExists(long id)
         {

@@ -18,6 +18,18 @@ namespace Supermarket.API.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Log in
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST
+        ///     {
+        ///        "username": "test",
+        ///        "password": "test"
+        ///     }
+        /// </remarks>
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
