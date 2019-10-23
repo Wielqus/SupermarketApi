@@ -52,6 +52,15 @@ namespace Supermarket.API
                     },
                 });
 
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme(){ 
+                    In = ParameterLocation.Header, 
+                    Description = "Please insert JWT with Bearer into field", 
+                    Name = "Authorization", 
+                    Type = SecuritySchemeType.ApiKey 
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement { { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } }, new string[] { } } });
+
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -72,7 +81,7 @@ namespace Supermarket.API
                 return conf;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             ConfigureJwt(services);
         }
 
@@ -99,6 +108,7 @@ namespace Supermarket.API
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication(); 
 
             app.UseEndpoints(endpoints =>
             {

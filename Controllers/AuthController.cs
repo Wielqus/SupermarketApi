@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
 
+
 namespace Supermarket.API.Controllers
 {
     [Route("api/[controller]")]
@@ -26,6 +27,22 @@ namespace Supermarket.API.Controllers
             this.user = user;
             this.configuration = configuration;
         }
+
+        /// <summary>
+        /// Login.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /Products
+        ///     {
+        ///         "login": "developerlife",
+        ///         "password": "aziemianski"
+        ///     }
+        ///
+        /// </remarks>
+  
+
         [HttpPost]
         [Route("token")]
         public AccessToken GenerateToken([FromBody]User credentials)
@@ -42,9 +59,10 @@ namespace Supermarket.API.Controllers
             }
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, credentials.Login),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                new Claim(JwtRegisteredClaimNames.Sub, credentials.Login),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiredOn = DateTime.Now.AddMinutes(configuration.TokenExpirationTime);
