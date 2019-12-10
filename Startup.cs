@@ -11,19 +11,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Supermarket.API.Models;
+using Recipes.Models;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Supermarket.API.Services;
+using Recipes.Services;
 using System.Configuration;
 using Microsoft.Extensions.Configuration.Json;
-using Supermarket.API.Helpers;
+using Recipes.Helpers;
 
-namespace Supermarket.API
+namespace Recipes
 {
     public class Startup
     {
@@ -37,7 +37,7 @@ namespace Supermarket.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SupermarketContext>(opt =>
+            services.AddDbContext<RecipesContext>(opt =>
                opt.UseInMemoryDatabase("Products"));
 
             services.AddCors();   
@@ -75,9 +75,9 @@ namespace Supermarket.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Supermarket Api",
+                    Title = "Recipes Api",
                     Version = "v1",
-                    Description = "A simple supermarket ASP.NET Core Web API",
+                    Description = "A simple Recipes ASP.NET Core Web API",
                     Contact = new OpenApiContact
                     {
                         Name = "Jakub Wielgus",
@@ -117,7 +117,7 @@ namespace Supermarket.API
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Supermarket API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Recipes API");
             });
 
             app.UseCors(x => x

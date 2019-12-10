@@ -6,10 +6,10 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Supermarket.API.Entities;
-using Supermarket.API.Helpers;
+using Recipes.Entities;
+using Recipes.Helpers;
 
-namespace Supermarket.API.Services
+namespace Recipes.Services
 {
     public interface IUserService
     {

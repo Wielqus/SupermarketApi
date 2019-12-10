@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Supermarket.API": {
+    "Recipes": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",

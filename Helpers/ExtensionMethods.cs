@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Supermarket.API.Entities;
+using Recipes.Entities;
 
-namespace Supermarket.API.Helpers
+namespace Recipes.Helpers
 {
     public static class ExtensionMethods
     {

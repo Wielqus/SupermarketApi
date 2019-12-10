@@ -1,4 +1,4 @@
-namespace Supermarket.API.Entities
+namespace Recipes.Entities
 {
     public class User
     {

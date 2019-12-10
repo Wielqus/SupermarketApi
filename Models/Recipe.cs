@@ -2,9 +2,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Supermarket.API.Models
+namespace Recipes.Models
 {
-    public class Product
+    public class Recipe
     {
         [Required]
         public long Id { get; set; }
@@ -15,7 +15,7 @@ namespace Supermarket.API.Models
 
         [Required]
         [DefaultValue(false)]
-        public long Price { get; set; }
+        public string Description { get; set; }
 
 
     }

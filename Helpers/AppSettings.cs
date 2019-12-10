@@ -1,4 +1,4 @@
-namespace Supermarket.API.Helpers
+namespace Recipes.Helpers
 {
     public class AppSettings
     {

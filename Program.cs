@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Supermarket.API
+namespace Recipes
 {
     #pragma warning disable CS1591
     public class Program

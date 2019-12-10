@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Supermarket.API.Services;
-using Supermarket.API.Models;
+using Recipes.Services;
+using Recipes.Models;
 using System.Linq;
 
-namespace Supermarket.API.Controllers
+namespace Recipes.Controllers
 {
     [Authorize]
     [ApiController]

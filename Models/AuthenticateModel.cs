@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Supermarket.API.Models
+namespace Recipes.Models
 {
     public class AuthenticateModel
     {
